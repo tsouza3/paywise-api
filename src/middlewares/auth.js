@@ -13,13 +13,13 @@ const protect = async (req, res, next) => {
 
             if (decoded.id === req.params.id) {
                 next();
-            } else {
-                res.status(400).json('Token inválido, não autorizado.');
-            }
+            } 
         } catch (error) {
+            console.error('Erro na verificação do token:', error); 
             res.status(400).json('Token inválido, não autorizado.');
         }
     } else {
+        console.log('Token não fornecido ou em formato inválido.'); 
         res.status(400).json('Token não fornecido ou em formato inválido.');
     }
 };

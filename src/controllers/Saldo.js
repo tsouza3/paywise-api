@@ -1,3 +1,4 @@
+import UserSaldo from '../models/userSaldo.js';
 import Saldo from '../models/Saldo.js';
 
 export async function addEntrada(req, res) {
@@ -5,15 +6,21 @@ export async function addEntrada(req, res) {
         const { descricao, valor } = req.body;
         const userId = req.user._id;
 
-        const novoSaldo = new Saldo({
+        const novaEntrada = new Saldo({
             user: userId,
             descricao,
             valor,
         });
 
-        const saldoSalvo = await novoSaldo.save();
+        const entradaSalva = await novaEntrada.save();
 
-        res.status(201).json(saldoSalvo);
+        const userSaldo = await UserSaldo.findOne({ user: userId });
+        if (userSaldo) {
+            userSaldo.saldo += valor;
+            await userSaldo.save();
+        }
+
+        res.status(201).json(entradaSalva);
     } catch (error) {
         res.status(400).json({ error: 'Erro ao adicionar nova entrada' });
     }
@@ -24,15 +31,21 @@ export async function addDespesa(req, res) {
         const { descricao, valor } = req.body;
         const userId = req.user._id;
 
-        const novoSaldo = new Saldo({
+        const novaDespesa = new Saldo({
             user: userId,
             descricao,
             valor: -valor, 
         });
 
-        const saldoSalvo = await novoSaldo.save();
+        const despesaSalva = await novaDespesa.save();
 
-        res.status(201).json(saldoSalvo);
+        const userSaldo = await UserSaldo.findOne({ user: userId });
+        if (userSaldo) {
+            userSaldo.saldo -= valor; 
+            await userSaldo.save();
+        }
+
+        res.status(201).json(despesaSalva);
     } catch (error) {
         res.status(400).json({ error: 'Erro ao adicionar nova despesa' });
     }

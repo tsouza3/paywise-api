@@ -6,7 +6,6 @@ const saldoSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
-    saldo: String,
     descricao: String,
     valor: Number,
 })

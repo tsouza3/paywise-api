@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
+import UserSaldo from '../models/userSaldo.js'
 
 export async function create(req, res) {
     const { name, email, password } = req.body;
@@ -16,6 +17,8 @@ export async function create(req, res) {
             email,
             password,
         });
+
+        await UserSaldo.create({ user: user._id, saldo: 0 });
 
         res.status(201).json(user);
     } catch (error) {
