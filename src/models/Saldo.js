@@ -8,6 +8,7 @@ const saldoSchema = new mongoose.Schema({
     },
     descricao: String,
     valor: Number,
+    categoria: String
 })
 
 const Saldo = mongoose.model('Saldo', saldoSchema);
