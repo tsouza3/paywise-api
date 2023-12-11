@@ -1,15 +1,20 @@
 import mongoose from "mongoose";
 
-const saldoSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+const saldoSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    descricao: String,
+    valor: Number,
+    categoria: String,
   },
-  descricao: String,
-  valor: Number,
-  categoria: String,
-});
+  {
+    timestamps: true,
+  },
+);
 
 const Saldo = mongoose.model("Saldo", saldoSchema);
 
