@@ -72,12 +72,22 @@ export async function gastosPorCategoria(req, res) {
   try {
     const { categoria } = req.params;
     const userId = req.user.id;
+    const { dias } = req.query;
 
     if (!categoria || !userId) {
       return res.status(400).json({ error: "Categoria ou ID inválidos" });
     }
 
-    const entradas = await Saldo.find({ user: userId, categoria });
+    let filtroData = {};
+    if (dias) {
+      const dataLimite = new Date();
+      dataLimite.setDate(dataLimite.getDate() - parseInt(dias, 10));
+      filtroData = { createdAt: { $gte: dataLimite } };
+
+      console.log(dias)
+    }
+
+    const entradas = await Saldo.find({ user: userId, categoria, ...filtroData });
 
     const valorTotalGasto = entradas.reduce((total, entrada) => {
       return total + entrada.valor;
@@ -85,6 +95,7 @@ export async function gastosPorCategoria(req, res) {
 
     res.status(200).json({ entradas, valorTotalGasto });
   } catch (error) {
+    console.error("Erro ao buscar gastos por categoria:", error);
     res.status(500).json({ error: "Erro ao buscar gastos por categoria" });
   }
 }

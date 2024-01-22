@@ -20,6 +20,7 @@ app.use(
 
 app.options("*", cors());
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use("/api/users", routes);

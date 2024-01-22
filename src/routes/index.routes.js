@@ -27,4 +27,6 @@ router.route("/gastos/:categoria/").get(protect, gastosPorCategoria);
 
 router.route("/saldo").get(protect, getSaldoUsuario);
 
+
+
 export default router;
